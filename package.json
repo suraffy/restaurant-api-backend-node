@@ -1,7 +1,7 @@
 {
-  "name": "restorant-api",
+  "name": "pcodel-restaurant",
   "version": "1.0.0",
-  "description": "A restorant api",
+  "description": "pcodel-restaurant api",
   "main": "server.js",
   "dependencies": {
     "bcryptjs": "^2.4.3",

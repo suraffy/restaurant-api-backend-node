@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const app = require('./app');
 
-const url = 'mongodb://localhost:27017/restorant-api';
+const url = 'mongodb://localhost:27017/pcodel-restaurant';
 mongoose
   .connect(url, {
     useNewUrlParser: true,
