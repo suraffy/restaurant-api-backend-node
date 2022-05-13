@@ -1,4 +1,4 @@
-const Meal = require('./../model/mealModel');
+const Meal = require('./../models/mealModel');
 
 const filterObj = (obj, allowedFields) => {
   const newObj = {};
@@ -52,7 +52,8 @@ exports.updateMeal = async (req, res) => {
     const meal = await Meal.findById(req.params.id);
     if (!meal) return res.status(404).json({ error: 'Meal not found!' });
 
-    await meal.updateOne(filteredBody, { new: true, runValidators: true });
+    Object.keys(filteredBody).forEach((el) => (meal[el] = filteredBody[el]));
+    await meal.save();
 
     res.status(200).json({ meal });
   } catch (err) {
