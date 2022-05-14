@@ -46,15 +46,12 @@ exports.createUser = async (req, res) => {
   }
 };
 
-exports.updateUser = async (req, res) => {
+exports.updateUserRole = async (req, res) => {
   try {
-    const allowedFields = ['name', 'email', 'password'];
-    const filteredBody = filterObj(req.body, allowedFields);
-
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ error: 'User not found!' });
 
-    Object.keys(filteredBody).forEach((el) => (user[el] = filteredBody[el]));
+    user.role = req.body.role;
     await user.save();
 
     res.status(200).json({ user });

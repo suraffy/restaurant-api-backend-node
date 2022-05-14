@@ -3,7 +3,7 @@ const {
   getAllUsers,
   getUser,
   createUser,
-  updateUser,
+  updateUserRole,
   deleteUser,
 } = require('./../controllers/userController');
 const {
@@ -20,7 +20,10 @@ router.post('/login', login);
 router.post('/logout', authenticate, logout);
 router.post('/logoutall', authenticate, logoutAll);
 
-router.route('/').get(getAllUsers).post(createUser);
-router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
+router.post('/', createUser);
+
+router.use(authenticate, restrictTo('admin'));
+router.get('/', getAllUsers);
+router.route('/:id').get(getUser).patch(updateUserRole).delete(deleteUser);
 
 module.exports = router;
