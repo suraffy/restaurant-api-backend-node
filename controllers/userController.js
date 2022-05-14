@@ -38,7 +38,9 @@ exports.createUser = async (req, res) => {
     const user = new User(filteredBody);
     await user.save();
 
-    res.status(201).json({ user });
+    const token = await user.generateAuthToken();
+
+    res.status(201).json({ user, token });
   } catch (err) {
     res.status(400).json({ error: 'Invalid data!' });
   }
