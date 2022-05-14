@@ -19,7 +19,6 @@ exports.login = async (req, res) => {
 
 exports.authenticate = async (req, res, next) => {
   try {
-    console.log(req.header('Authorization'));
     if (!req.header('Authorization').startsWith('Bearer ')) throw new Error();
 
     const token = req.header('Authorization').split(' ')[1];

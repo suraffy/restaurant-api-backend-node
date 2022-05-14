@@ -1,5 +1,8 @@
 const express = require('express');
 const {
+  getMe,
+  updateMe,
+  deleteMe,
   getAllUsers,
   getUser,
   createUser,
@@ -22,7 +25,10 @@ router.post('/logoutall', authenticate, logoutAll);
 
 router.post('/', createUser);
 
-router.use(authenticate, restrictTo('admin'));
+router.use(authenticate);
+router.route('/me').get(getMe).patch(updateMe).delete(deleteMe);
+
+router.use(restrictTo('admin'));
 router.get('/', getAllUsers);
 router.route('/:id').get(getUser).patch(updateUserRole).delete(deleteUser);
 

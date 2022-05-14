@@ -9,6 +9,38 @@ const filterObj = (obj, allowedFields) => {
   return newObj;
 };
 
+exports.getMe = async (req, res) => {
+  try {
+    res.status(200).json({ user: req.user });
+  } catch (err) {
+    res.status(500).json({ error: 'Can not get profile!' });
+  }
+};
+
+exports.updateMe = async (req, res) => {
+  try {
+    const allowedFields = ['name', 'email', 'password'];
+    const filteredBody = filterObj(req.body, allowedFields);
+
+    Object.keys(filteredBody).forEach((el) => (req.user[el] = req.body[el]));
+    await req.user.save();
+
+    res.status(200).json({ user: req.user });
+  } catch (err) {
+    res.status(400).json({ error: 'Invalid data!' });
+  }
+};
+
+exports.deleteMe = async (req, res) => {
+  try {
+    await req.user.deleteOne();
+    res.status(200).json();
+  } catch (err) {
+    res.status(500).json({ error: 'Can not delete profile!' });
+  }
+};
+
+// Only for Admins
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
