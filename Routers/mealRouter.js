@@ -1,4 +1,5 @@
 const express = require('express');
+const reviewRouter = require('./reviewRouter');
 const {
   getAllMeals,
   getMeal,
@@ -9,6 +10,7 @@ const {
 const { authenticate, restrictTo } = require('./../controllers/authController');
 
 const router = express.Router();
+router.use('/:mealId/reviews', reviewRouter);
 
 router.get('/', getAllMeals).get('/:id', getMeal);
 

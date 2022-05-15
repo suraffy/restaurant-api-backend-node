@@ -22,7 +22,9 @@ exports.updateMe = async (req, res) => {
     const allowedFields = ['name', 'email', 'password'];
     const filteredBody = filterObj(req.body, allowedFields);
 
-    Object.keys(filteredBody).forEach((el) => (req.user[el] = req.body[el]));
+    Object.keys(filteredBody).forEach(
+      (el) => (req.user[el] = filteredBody[el])
+    );
     await req.user.save();
 
     res.status(200).json({ user: req.user });

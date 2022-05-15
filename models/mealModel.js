@@ -16,11 +16,9 @@ const mealSchema = new Schema(
       type: String,
       trim: true,
     },
-    ratingsAverage: {
+    ratingsTotal: {
       type: Number,
-      min: [1, 'Rating can not be less than 1.0'],
-      max: [5, 'Rating can not be more than 5'],
-      default: 4.5,
+      default: 0,
     },
     ratingsQuantity: {
       type: Number,
