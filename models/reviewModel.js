@@ -29,6 +29,39 @@ const reviewSchema = new Schema(
   { timestamps: true }
 );
 
+reviewSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    const meal = await Meal.findById(this.meal);
+
+    meal.ratingsTotal += this.rating;
+    meal.ratingsQuantity++;
+
+    await meal.save();
+  } else if (this.isModified('rating')) {
+    const meal = await Meal.findById(this.meal);
+
+    meal.ratingsTotal = meal.ratingsTotal - this.oldRating + this.rating;
+    await meal.save();
+  }
+
+  next();
+});
+
+reviewSchema.pre(
+  'deleteOne',
+  { document: true, query: false },
+  async function (next) {
+    const meal = await Meal.findById(this.meal);
+
+    meal.ratingsTotal -= this.rating;
+    meal.ratingsQuantity--;
+
+    await meal.save();
+
+    next();
+  }
+);
+
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;

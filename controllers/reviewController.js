@@ -64,6 +64,7 @@ exports.updateReview = async (req, res) => {
     });
     if (!review) return res.status(404).json({ error: 'Review not found!' });
 
+    review.oldRating = review.rating;
     Object.keys(filteredBody).forEach((el) => (review[el] = filteredBody[el]));
     await review.save();
 
