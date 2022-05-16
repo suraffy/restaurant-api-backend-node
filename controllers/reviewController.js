@@ -11,10 +11,7 @@ const filterObj = (obj, allowedFields) => {
 
 exports.getAllReviews = async (req, res) => {
   try {
-    const reviews = await Review.find({ meal: req.params.mealId }).populate({
-      path: 'user',
-      select: 'name email',
-    });
+    const reviews = await Review.find({ meal: req.params.mealId });
 
     res.status(200).json({ results: reviews.length, reviews });
   } catch (err) {
@@ -24,10 +21,7 @@ exports.getAllReviews = async (req, res) => {
 
 exports.getReview = async (req, res) => {
   try {
-    const review = await Review.findById(req.params.id).populate({
-      path: 'user',
-      select: 'name email',
-    });
+    const review = await Review.findById(req.params.id);
     if (!review) return res.status(404).json({ error: 'Review not found!' });
 
     res.status(200).json({ review });
@@ -43,6 +37,12 @@ exports.createReview = async (req, res) => {
 
     filteredBody.meal = req.params.mealId;
     filteredBody.user = req.user.id;
+
+    const isDuplicate = await Review.findOne({
+      user: req.user.id,
+      meal: req.params.mealId,
+    });
+    if (isDuplicate) throw new Error();
 
     const review = new Review(filteredBody);
     await review.save();

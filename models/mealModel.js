@@ -30,11 +30,17 @@ const mealSchema = new Schema(
     },
     coverImage: Buffer,
   },
-  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { timestamps: true, toJSON: { virtuals: true } }
 );
 
 mealSchema.virtual('rating').get(function () {
-  return this.ratingsTotal / this.ratingsQuantity;
+  return Math.round((this.ratingsTotal / this.ratingsQuantity) * 10) / 10;
+});
+
+mealSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'meal',
 });
 
 const Meal = mongoose.model('Meal', mealSchema);

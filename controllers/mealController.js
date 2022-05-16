@@ -21,7 +21,10 @@ exports.getAllMeals = async (req, res) => {
 
 exports.getMeal = async (req, res) => {
   try {
-    const meal = await Meal.findById(req.params.id);
+    const meal = await Meal.findById(req.params.id).populate({
+      path: 'reviews',
+      select: 'review rating user createdAt',
+    });
     if (!meal) return res.status(404).json({ error: 'Meal not found!' });
 
     res.status(200).json({ meal });

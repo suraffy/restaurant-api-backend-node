@@ -31,7 +31,16 @@ const reviewSchema = new Schema(
 
 reviewSchema.index({ meal: 1, user: 1 }, { unique: true });
 
-reviewSchema.post('save', async function (doc, next) {
+reviewSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'user',
+    select: 'name email',
+  });
+
+  next();
+});
+
+reviewSchema.pre('save', async function (next) {
   if (this.isNew) {
     const meal = await Meal.findById(this.meal);
 
@@ -49,10 +58,10 @@ reviewSchema.post('save', async function (doc, next) {
   next();
 });
 
-reviewSchema.post(
+reviewSchema.pre(
   'deleteOne',
   { document: true, query: false },
-  async function (doc, next) {
+  async function (next) {
     const meal = await Meal.findById(this.meal);
 
     meal.ratingsTotal -= this.rating;
