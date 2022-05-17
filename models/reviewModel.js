@@ -47,11 +47,18 @@ reviewSchema.pre('save', async function (next) {
     meal.ratingsTotal += this.rating;
     meal.ratingsQuantity++;
 
+    meal.rating =
+      Math.round((meal.ratingsTotal / meal.ratingsQuantity) * 10) / 10;
+
     await meal.save();
   } else if (this.isModified('rating')) {
     const meal = await Meal.findById(this.meal);
 
     meal.ratingsTotal = meal.ratingsTotal - this.oldRating + this.rating;
+
+    meal.rating =
+      Math.round((meal.ratingsTotal / meal.ratingsQuantity) * 10) / 10;
+
     await meal.save();
   }
 

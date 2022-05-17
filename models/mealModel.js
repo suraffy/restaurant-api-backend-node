@@ -19,10 +19,14 @@ const mealSchema = new Schema(
     ratingsTotal: {
       type: Number,
       default: 0,
+      select: false,
     },
     ratingsQuantity: {
       type: Number,
       default: 0,
+    },
+    rating: {
+      type: Number,
     },
     price: {
       type: Number,
@@ -32,10 +36,6 @@ const mealSchema = new Schema(
   },
   { timestamps: true, toJSON: { virtuals: true } }
 );
-
-mealSchema.virtual('rating').get(function () {
-  return Math.round((this.ratingsTotal / this.ratingsQuantity) * 10) / 10;
-});
 
 mealSchema.virtual('reviews', {
   ref: 'Review',

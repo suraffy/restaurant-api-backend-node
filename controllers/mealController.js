@@ -11,7 +11,25 @@ const filterObj = (obj, allowedFields) => {
 
 exports.getAllMeals = async (req, res) => {
   try {
-    const meals = await Meal.find();
+    const filter = {};
+    let select = '';
+    const options = {};
+
+    if (req.query.name) filter.name = req.query.name;
+    if (req.query.rating) filter.rating = req.query.rating;
+    if (req.query.price) filter.price = req.query.price;
+    if (req.query.createdAt) filter.createdAt = req.query.createdAt;
+
+    if (req.query.fields) select = req.query.fields.split(',').join(' ');
+
+    if (req.query.sort) options.sort = req.query.sort.split(',').join(' ');
+
+    if (req.query.limit) options.limit = parseInt(req.query.limit);
+    if (req.query.skip) options.skip = parseInt(req.query.skip);
+
+    console.log({ options });
+
+    const meals = await Meal.find(filter, select, options);
 
     res.status(200).json({ results: meals.length, meals });
   } catch (err) {
